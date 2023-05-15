@@ -36,7 +36,7 @@ jobs:
       - name: Update Rancher workload
         run: |
           export RANCHER_ACCESS_KEY=${{ secrets.RANCHER_ACCESS_KEY }}
-          export RANCHER_SECRET_KEY=${{ secrets.3RANCHER_SECRET_KEY }}
+          export RANCHER_SECRET_KEY=${{ secrets.RANCHER_SECRET_KEY }}
           export RANCHER_URL=https://rancher.34.118.61.21.sslip.io
           export RANCHER_CLUSTER_ID=quickstart-gcp-custom
           export RANCHER_WORKLOAD_ID=iravenio
