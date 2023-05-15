@@ -22,7 +22,7 @@ jobs:
         run: yarn install
 
       - name: Build Docker image
-        run: docker build -t your-docker-hub-username/your-image-name:${{ github.sha }} .
+        run: docker build -t koushamad/iravenio:${{ github.sha }} .
       
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
@@ -31,15 +31,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       
       - name: Push Docker image to Docker Hub
-        run: docker push your-docker-hub-username/your-image-name:${{ github.sha }}
+        run: docker push koushamad/iravenio:${{ github.sha }}
 
       - name: Update Rancher workload
         run: |
           export RANCHER_ACCESS_KEY=${{ secrets.RANCHER_ACCESS_KEY }}
-          export RANCHER_SECRET_KEY=${{ secrets.RANCHER_SECRET_KEY }}
-          export RANCHER_URL=https://your-rancher-url
-          export RANCHER_CLUSTER_ID=your-rancher-cluster-id
-          export RANCHER_WORKLOAD_ID=your-rancher-workload-id
+          export RANCHER_SECRET_KEY=${{ secrets.3RANCHER_SECRET_KEY }}
+          export RANCHER_URL=https://rancher.34.118.61.21.sslip.io
+          export RANCHER_CLUSTER_ID=quickstart-gcp-custom
+          export RANCHER_WORKLOAD_ID=iravenio
           export DOCKER_IMAGE_TAG=${{ github.sha }}
 
           rancher login $RANCHER_URL --token $RANCHER_ACCESS_KEY:$RANCHER_SECRET_KEY --context $RANCHER_CLUSTER_ID
