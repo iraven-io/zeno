@@ -1,0 +1,47 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build Docker image
+        run: docker build -t your-docker-hub-username/your-image-name:${{ github.sha }} .
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+      - name: Push Docker image to Docker Hub
+        run: docker push your-docker-hub-username/your-image-name:${{ github.sha }}
+
+      - name: Update Rancher workload
+        run: |
+          export RANCHER_ACCESS_KEY=${{ secrets.RANCHER_ACCESS_KEY }}
+          export RANCHER_SECRET_KEY=${{ secrets.RANCHER_SECRET_KEY }}
+          export RANCHER_URL=https://your-rancher-url
+          export RANCHER_CLUSTER_ID=your-rancher-cluster-id
+          export RANCHER_WORKLOAD_ID=your-rancher-workload-id
+          export DOCKER_IMAGE_TAG=${{ github.sha }}
+
+          rancher login $RANCHER_URL --token $RANCHER_ACCESS_KEY:$RANCHER_SECRET_KEY --context $RANCHER_CLUSTER_ID
+          rancher kubectl set image deployment/your-workload-name your-container-name=your-docker-hub-username/your-image-name:${DOCKER_IMAGE_TAG}
+
