@@ -22,7 +22,7 @@ jobs:
         run: yarn install
 
       - name: Build Docker image
-        run: docker build -t koushamad/iraven-zeno:${{ github.sha }}
+        run: docker build -t koushamad/iraven-zeno:${{ github.sha }} .
       
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
