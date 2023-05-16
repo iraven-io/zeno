@@ -42,5 +42,5 @@ jobs:
           export DOCKER_IMAGE_TAG=${{ github.sha }}
 
           rancher login $RANCHER_URL --token $RANCHER_ACCESS_KEY:$RANCHER_SECRET_KEY --context $RANCHER_CLUSTER_ID
-          rancher kubectl set image deployment/your-workload-name your-container-name=your-docker-hub-username/your-image-name:${DOCKER_IMAGE_TAG}
+          rancher kubectl set image deployment/zeno your-container-name=koushamad/iraven-zeno:${DOCKER_IMAGE_TAG}
 
